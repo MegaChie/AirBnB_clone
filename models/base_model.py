@@ -34,7 +34,7 @@ class BaseModel:
     def save(self):
         """ BaseModel """
         self.updated_at = datetime.now()
-        storage.save()
+        # storage.save()
 
     def to_dict(self):
         """ BaseModel """
