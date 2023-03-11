@@ -8,7 +8,10 @@ from datetime import datetime
 
 
 class BaseModel:
-    """ BaseModel """
+    """ BaseModel
+    Args:
+            - *args: list of arguments
+            - **kwargs: dict of key-values arguments """
     def __init__(self, *args, **kwargs):
         if kwargs is not None and kwargs != {}:
             for key in kwargs:
