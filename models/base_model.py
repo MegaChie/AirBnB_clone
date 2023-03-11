@@ -26,7 +26,6 @@ class BaseModel:
             self.updated_at = datetime.now()
             storage.new(self)
 
-
     def __str__(self):
         """ BaseModel """
         return "[{}] ({}) {}".\
