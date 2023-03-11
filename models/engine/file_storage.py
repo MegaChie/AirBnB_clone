@@ -14,29 +14,29 @@ class FileStorage:
     
     def all(self):
         """ Store first object """
-        return FileStorage.__objects
+        return self.__objects
 
     def new(self, obj):
         """ Store first object """
         key = "{}.{}".format(type(obj).__name__, obj.id)
-        FileStorage.__objects[key] = obj
+        self.__objects[key] = obj
 
     def save(self):
         """ Store first object """
-        with open(FileStorage.__file_path, "w", encoding="utf-8") as writer:
+        with open(self.__file_path, "w", encoding="utf-8") as writer:
             d = {key: value.to_dict() for
-                 key, value in FileStorage.__objects.items()}
+                 key, value in self.__objects.items()}
             json.dump(d, writer)
 
     def reload(self):
         """ Store first object """
-        if not os.path.isfile(FileStorage.__file_path):
+        if not os.path.isfile(self.__file_path):
             return
-        with open(FileStorage.__file_path, "r", encoding="utf-8") as opener:
+        with open(self.__file_path, "r", encoding="utf-8") as opener:
             obj_dict = json.load(opener)
             obj_dict = {key: self.classes()[value["__class__"]](**v)
                         for key, value in obj_dict.items()}
-            FileStorage.__objects = obj_dict
+            self.__objects = obj_dict
 
     def classes(self):
         classes = {"BaseModel": BaseModel,
