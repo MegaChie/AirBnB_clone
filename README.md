@@ -1,8 +1,8 @@
 # preface
-		This is our first full web application, named AirBnB.
+	This is our first full web application, named AirBnB.
 
 # introduction
-		This repository will contain our team project that is an simple clone of the AirBnB. it will
+	This repository will contain our team project that is an simple clone of the AirBnB. it will
 	contain our code for the project as per described in the ALX's website.
 
 # editor's note
