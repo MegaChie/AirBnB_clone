@@ -10,6 +10,7 @@ from datetime import datetime
 class BaseModel:
     """ BaseModel """
     def __init__(self, *args, **kwargs):
+        """ BaseModel """
         if kwargs is not None and kwargs != {}:
             for key in kwargs:
                 if key == "created_at":
