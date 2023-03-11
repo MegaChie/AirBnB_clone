@@ -42,3 +42,4 @@ class BaseModel:
         newDict["created_at"] = newDict["created_at"].isoformat()
         newDict["updated_at"] = newDict["updated_at"].isoformat()
         return newDict
+
