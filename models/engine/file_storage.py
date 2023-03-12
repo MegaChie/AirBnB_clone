@@ -39,8 +39,8 @@ class FileStorage:
             self.__objects = obj_dict
 
     def classes(self):
-        from model.base_model import BaseModel
-        from model.user import User
+        from models.base_model import BaseModel
+        from models.user import User
         classes = {"BaseModel": BaseModel,
                    "User": User,
                    "State": State,
