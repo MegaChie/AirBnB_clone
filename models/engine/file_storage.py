@@ -28,16 +28,6 @@ class FileStorage:
                  key, value in self.__objects.items()}
             json.dump(d, writer)
 
-    def reload(self):
-        """ Store first object """
-        if not os.path.isfile(self.__file_path):
-            return
-        with open(self.__file_path, "r", encoding="utf-8") as opener:
-            objDict = json.load(opener)
-            objDict = {k: self.classes()[v["__class__"]](**v)
-                       for k, v in objDict.items()}
-            self.__objects = objDict
-
     def classes(self):
         from models.base_model import BaseModel
         from models.user import User
@@ -54,3 +44,14 @@ class FileStorage:
                    "Place": Place,
                    "Review": Review}
         return classes
+
+    def reload(self):
+        """ Store first object """
+        if not os.path.isfile(self.__file_path):
+            return
+        with open(self.__file_path, "r", encoding="utf-8") as opener:
+            objDict = json.load(opener)
+            objDict = {k: self.classes()[v["__class__"]](**v)
+                       for k, v in objDict.items()}
+            self.__objects = objDict
+
