@@ -14,18 +14,18 @@ class FileStorage:
 
     def all(self):
         """ Store first object """
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
         """ Store first object """
         key = "{}.{}".format(type(obj).__name__, obj.id)
-        self.__objects[key] = obj
+        FileStorage.__objects[key] = obj
 
     def save(self):
         """ Store first object """
-        with open(self.__file_path, "w", encoding="utf-8") as writer:
+        with open(FileStorage.__file_path, "w", encoding="utf-8") as writer:
             d = {key: value.to_dict() for
-                 key, value in self.__objects.items()}
+                 key, value in FileStorage.__objects.items()}
             json.dump(d, writer)
 
     def classes(self):
@@ -47,10 +47,10 @@ class FileStorage:
 
     def reload(self):
         """ Store first object """
-        if not os.path.isfile(self.__file_path):
+        if not os.path.isfile(FileStorage.__file_path):
             return
-        with open(self.__file_path, "r", encoding="utf-8") as opener:
+        with open(FileStorage.__file_path, "r", encoding="utf-8") as opener:
             objDict = json.load(opener)
             objDict = {k: self.classes()[v["__class__"]](**v)
                        for k, v in objDict.items()}
-            self.__objects = objDict
+            FileStorage.__objects = objDict
