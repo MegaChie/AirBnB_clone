@@ -11,7 +11,7 @@ class FileStorage:
     """ Store first object """
     __file_path = "file.json"
     __objects = {}
-    
+
     def all(self):
         """ Store first object """
         return self.__objects
@@ -35,7 +35,7 @@ class FileStorage:
         with open(self.__file_path, "r", encoding="utf-8") as opener:
             objDict = json.load(opener)
             objDict = {k: self.classes()[v["__class__"]](**v)
-                        for k, v in objDict.items()}
+                       for k, v in objDict.items()}
             self.__objects = objDict
 
     def classes(self):
