@@ -134,7 +134,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
             else:
                 text = [str(obj) for key, obj in storage.all().items()
-                      if type(obj).__name__ == argument[0]]
+                        if type(obj).__name__ == argument[0]]
                 print(text)
         else:
             new_list = [str(obj) for key, obj in storage.all().items()]
@@ -197,7 +197,6 @@ class HBNBCommand(cmd.Cmd):
                         pass  # fine, stay a string then
                 setattr(storage.all()[key], attribute, value)
                 storage.all()[key].save()
-
 
 
 if __name__ == '__main__':
