@@ -34,8 +34,8 @@ class FileStorage:
             return
         with open(self.__file_path, "r", encoding="utf-8") as opener:
             objDict = json.load(opener)
-            objDict = {key: self.classes()[value["__class__"]](**v)
-                        for key, value in objDict.items()}
+            objDict = {k: self.classes()[v["__class__"]](**v)
+                        for k, v in objDict.items()}
             self.__objects = objDict
 
     def classes(self):
