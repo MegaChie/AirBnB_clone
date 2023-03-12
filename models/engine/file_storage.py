@@ -33,10 +33,10 @@ class FileStorage:
         if not os.path.isfile(self.__file_path):
             return
         with open(self.__file_path, "r", encoding="utf-8") as opener:
-            obj_dict = json.load(opener)
-            obj_dict = {key: self.classes()[value["__class__"]](**v)
-                        for key, value in obj_dict.items()}
-            self.__objects = obj_dict
+            objDict = json.load(opener)
+            objDict = {key: self.classes()[value["__class__"]](**v)
+                        for key, value in objDict.items()}
+            self.__objects = objDict
 
     def classes(self):
         from models.base_model import BaseModel
