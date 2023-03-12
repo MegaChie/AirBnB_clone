@@ -54,4 +54,3 @@ class FileStorage:
             objDict = {k: self.classes()[v["__class__"]](**v)
                        for k, v in objDict.items()}
             self.__objects = objDict
-
