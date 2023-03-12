@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+""" First User """
 
 
 from models.base_model import BaseModel
