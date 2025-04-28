@@ -15,7 +15,7 @@ class BaseModel:
         created_at (datetime): Timestamp of instance creation.
         updated_at (datetime): Timestamp of last update to instance.
     """
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
         Initialises the class object
         """
