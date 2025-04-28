@@ -44,7 +44,7 @@ class BaseModel:
         Returns a dictionary containing all keys/values
         of __dict__ of the instance.
         """
-        dict = {}
+        dict = {"__class__": self.__class__.__name__}
         for key, value in self.__dict__.items():
             if key in ["updated_at", "created_at"]:
                 value = value.isoformat()
