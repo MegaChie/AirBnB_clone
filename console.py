@@ -4,6 +4,7 @@ Command line interpreter for the project.
 """
 import cmd
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 
 
@@ -12,7 +13,7 @@ class HBNBCommand(cmd.Cmd):
     Class object for the interpreter.
     """
     prompt = "(hbnb) "
-    classes = {"BaseModel"}
+    classes = {"BaseModel": BaseModel(), "User": User()}
 
     def do_quit(self, arg):
         """
@@ -36,16 +37,16 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """
-        Creates a new instance of BaseModel, saves it then prints its ID.
+        Creates a new instance of a model object, saves it then prints its ID.
         """
         if not arg:
             print("** class name missing **")
             return
-        if arg not in HBNBCommand.classes:
+        if arg not in HBNBCommand.classes.keys():
             print("** class doesn't exist **")
             return
         else:
-            new_object = BaseModel()
+            new_object = HBNBCommand.classes[arg]
             new_object.save()
             object_dict = new_object.to_dict()
             print(object_dict["id"])
