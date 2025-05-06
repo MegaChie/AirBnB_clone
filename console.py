@@ -13,7 +13,9 @@ class HBNBCommand(cmd.Cmd):
     Class object for the interpreter.
     """
     prompt = "(hbnb) "
-    classes = {"BaseModel": BaseModel(), "User": User()}
+    classes = {
+               "BaseModel": BaseModel(), "User": User()
+               }
 
     def do_quit(self, arg):
         """
@@ -60,7 +62,7 @@ class HBNBCommand(cmd.Cmd):
                 objects_list.append(str(object))
             print(objects_list)
             return
-        elif arg not in HBNBCommand.classes:
+        elif arg not in HBNBCommand.classes.keys():
             print("** class doesn't exist **")
             return
         else:
@@ -81,7 +83,7 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        if args[0] not in HBNBCommand.classes:
+        if args[0] not in HBNBCommand.classes.keys():
             print("** class doesn't exist **")
             return
         elif len(args) == 1:
@@ -105,7 +107,7 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        if args[0] not in HBNBCommand.classes:
+        if args[0] not in HBNBCommand.classes.keys():
             print("** class doesn't exist **")
             return
         elif len(args) == 1:
@@ -130,7 +132,7 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        if args[0] not in HBNBCommand.classes:
+        if args[0] not in HBNBCommand.classes.keys():
             print("** class doesn't exist **")
             return
         elif len(args) == 1:
