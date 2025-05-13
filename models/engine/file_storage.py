@@ -10,6 +10,15 @@ class FileStorage:
     Serializes instances to a JSON file and
     deserializes JSON file to instances.
     """
+    classes = {
+                "BaseModel": "models.base_model",
+                "User": "models.user",
+                "City": "models.city",
+                "State": "models.state",
+                "Place": "models.place",
+                "Review": "models.review",
+                "Amenity": "models.amenity"
+               }
     __file_path = "file.json"
     __objects = {}
 
@@ -45,12 +54,10 @@ class FileStorage:
                 objects = json.load(cursor)
                 for key, value in objects.items():
                     class_name = value["__class__"]
-                    module = __import__("models.base_model" and "models.user"
-                                        and "models.city" and "models.state"
-                                        and "models.place" and "models.review"
-                                        and "models.amenity",
-                                        fromlist=[class_name])
-                    cls = getattr(module, class_name)
-                    FileStorage.__objects[key] = cls(**value)
+                    if class_name in FileStorage.classes.keys():
+                        module = __import__(FileStorage.classes[class_name],
+                                            fromlist=[class_name])
+                        cls = getattr(module, class_name)
+                        FileStorage.__objects[key] = cls(**value)
         except Exception:
             pass
