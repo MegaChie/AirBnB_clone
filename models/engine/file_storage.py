@@ -45,7 +45,10 @@ class FileStorage:
                 objects = json.load(cursor)
                 for key, value in objects.items():
                     class_name = value["__class__"]
-                    module = __import__("models.base_model" and "models.user",
+                    module = __import__("models.base_model" and "models.user"
+                                        and "models.city" and "models.state"
+                                        and "models.place" and "models.review"
+                                        and "models.amenity",
                                         fromlist=[class_name])
                     cls = getattr(module, class_name)
                     FileStorage.__objects[key] = cls(**value)
