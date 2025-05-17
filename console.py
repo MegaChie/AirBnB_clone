@@ -165,6 +165,31 @@ class HBNBCommand(cmd.Cmd):
                     return
             print("** no instance found **")
             return
+        
+    def default(self, line):
+        """
+        Handels advantage commands that are like <ClassName>.<command>
+        """
+        command = line.split(".")
+        try:
+            if command[1] == "all()":
+                if command[0] in HBNBCommand.classes.keys():
+                    objects = storage.all()
+                    class_objects = []
+                    for key, value in objects.items():
+                        temp = key.split(".")
+                        if temp[0] == command[0]:
+                            class_objects.append(str(value))
+                    print("[{}]".format(", ".join(class_objects)))
+                    return
+                else:
+                    print("** class doesn't exist **")
+                    return
+        except IndexError:
+            print("*** Unknown syntax: {} ***".format(line))
+            return
+
+            
 
 
 
