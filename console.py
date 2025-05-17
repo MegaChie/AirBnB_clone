@@ -101,7 +101,7 @@ class HBNBCommand(cmd.Cmd):
             objects = storage.all()
             for key, value in objects.items():
                 temp = key.split(".")
-                if temp[1] == args[1]:
+                if temp[0] == args[0] and temp[1] == args[1]:
                     print(str(value))
                     return
             print("** no instance found **")
@@ -125,7 +125,7 @@ class HBNBCommand(cmd.Cmd):
             objects = storage.all()
             for object in objects:
                 temp = object.split(".")
-                if temp[1] == args[1]:
+                if if temp[0] == args[0] and temp[1] == args[1]:
                     del objects[object]
                     storage.save()
                     return
@@ -159,7 +159,7 @@ class HBNBCommand(cmd.Cmd):
             objects = storage.all()
             for key, value in objects.items():
                 temp = key.split(".")
-                if temp[1] == args[1]:
+                if temp[0] == args[0] and temp[1] == args[1]:
                     setattr(value, attribute[0], attribute[1])
                     storage.save()
                     return
