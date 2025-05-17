@@ -125,7 +125,7 @@ class HBNBCommand(cmd.Cmd):
             objects = storage.all()
             for object in objects:
                 temp = object.split(".")
-                if if temp[0] == args[0] and temp[1] == args[1]:
+                if temp[0] == args[0] and temp[1] == args[1]:
                     del objects[object]
                     storage.save()
                     return
