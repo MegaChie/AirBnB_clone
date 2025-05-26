@@ -106,7 +106,7 @@ class HBNBCommand(cmd.Cmd):
         Prints the string representation of an instance
         based on the class name and id.
         """
-        args = args.split()
+        args = args.split() or ["", ""]
         if len(args) == 1:
             args.append("")
 
@@ -146,7 +146,7 @@ class HBNBCommand(cmd.Cmd):
         """
         Updates an instance based on the class name and id.
         """
-        args = args.split()
+        args = args.split() or ["", ""]
         if len(args) == 1:
             args.append("")
         if self.helper_class_check(args[0], args[1], True):
