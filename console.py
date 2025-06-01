@@ -3,6 +3,8 @@
 Command line interpreter for the project.
 """
 import cmd
+import re
+import shlex
 from typing import Optional
 from models import storage
 from models.amenity import Amenity
@@ -25,18 +27,19 @@ class HBNBCommand(cmd.Cmd):
                "Review": Review, "State": State,
                "User": User
                }
+    objects = storage.all()
 
-    def helper_class_check(self, name: Optional[str] = None,
+    def helper_class_check(self, class_name: Optional[str] = None,
                            ID: Optional[str] = None,
                            check_ID: bool = False) -> bool:
         """
         Checks the class and returns output as needed.
         """
-        if not name and not ID:
+        if not class_name and not ID:
             print("** class name missing **")
             return True
 
-        if name not in HBNBCommand.classes.keys():
+        if class_name not in HBNBCommand.classes.keys():
             print("** class doesn't exist **")
             return True
 
@@ -46,6 +49,30 @@ class HBNBCommand(cmd.Cmd):
                 return True
 
         return False
+
+    def helper_get_object(self, class_name: str, ID: str):
+        """
+        Returns an object based on it's class and ID.
+        """
+        key = f"{class_name}.{ID}"
+        return HBNBCommand.objects.get(key)
+
+    def helper_get_all(self, class_name: Optional[str] = None,
+                       get_count: bool = False):
+        objects_list = []
+        if class_name and class_name in HBNBCommand.classes.keys():
+            for key, value in HBNBCommand.objects.items():
+                if key.startswith(class_name):
+                    objects_list.append(str(value))
+
+        else:
+            for value in HBNBCommand.objects.values():
+                objects_list.append(str(value))
+
+        if get_count:
+            return len(objects_list)
+        
+        return objects_list
 
 
     def do_quit(self, arg: str) -> None:
@@ -61,7 +88,7 @@ class HBNBCommand(cmd.Cmd):
         print()
         return True
 
-    def emptyline(self):
+    def emptyline(self) -> None:
         """
         Overrides the default behavior of repeating the last command
         when an empty line is entered.
@@ -83,21 +110,14 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, arg: str) -> None:
         if not arg:
-            objects = storage.all()
-            objects_list = []
-            for object in objects.values():
-                objects_list.append(str(object))
+            objects_list = self.helper_get_all()
             print(objects_list)
             return
 
         if self.helper_class_check(arg):
             return
 
-        objects = storage.all()
-        objects_list = []
-        for key, value in objects.items():
-            if arg in key:
-                objects_list.append(str(value))
+        objects_list = self.helper_get_all(arg)
         print(objects_list)
         return
 
@@ -106,19 +126,17 @@ class HBNBCommand(cmd.Cmd):
         Prints the string representation of an instance
         based on the class name and id.
         """
-        args = args.split() or ["", ""]
+        args = shlex.split(args) or ["", ""]
         if len(args) == 1:
             args.append("")
 
         if self.helper_class_check(args[0], args[1], True):
             return
 
-        objects = storage.all()
-        for key, value in objects.items():
-            temp = key.split(".")
-            if temp[0] == args[0] and temp[1] == args[1]:
-                print(str(value))
-                return
+        object = self.helper_get_object(args[0], args[1])
+        if object:
+            print(object)
+            return
         print("** no instance found **")
         return
 
@@ -126,27 +144,27 @@ class HBNBCommand(cmd.Cmd):
         """
         Deletes an instance based on the class name and id.
         """
-        args = args.split() or ["", ""]
+        args = shlex.split(args) or ["", ""]
         if len(args) == 1:
             args.append("")
         if self.helper_class_check(args[0], args[1], True):
             return
 
-        objects = storage.all()
-        for object in objects:
-            temp = object.split(".")
-            if temp[0] == args[0] and temp[1] == args[1]:
-                del objects[object]
-                storage.save()
-                return
+        # Refactor
+        object = self.helper_get_object(args[0], args[1])
+        if object:
+            key = f"{args[0]}.{args[1]}"
+            del HBNBCommand.objects[key]
+            storage.save()
+            return
         print("** no instance found **")
         return
 
-    def do_update(self,args) -> None:
+    def do_update(self, args) -> None:
         """
         Updates an instance based on the class name and id.
         """
-        args = args.split() or ["", ""]
+        args = shlex.split(args) or ["", ""]
         if len(args) == 1:
             args.append("")
         if self.helper_class_check(args[0], args[1], True):
@@ -159,45 +177,29 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
             return
         else:
-            objects = storage.all()
-            attribute = args[2::]
-            attribute[1] = attribute[1].strip("\"")
-            objects = storage.all()
-            for key, value in objects.items():
-                temp = key.split(".")
-                if temp[0] == args[0] and temp[1] == args[1]:
-                    setattr(value, attribute[0], attribute[1])
-                    storage.save()
-                    return
-            print("** no instance found **")
+            object = self.helper_get_object(args[0], args[1])
+            if not object:
+                print("** no instance found **")
+                return
+            setattr(object, args[2], args[3])
+            storage.save()
             return
 
     def default(self, line):
         """
-        Handels advantage commands that are like <ClassName>.<command>
+        Handles advanced commands like <ClassName>.<command>()
         """
-        command = line.split(".")
-        try:
-            if command[1] == "all()":
-                if command[0] in HBNBCommand.classes.keys():
-                    objects = storage.all()
-                    class_objects = []
-                    for key, value in objects.items():
-                        temp = key.split(".")
-                        if temp[0] == command[0]:
-                            class_objects.append(str(value))
-                    print("[{}]".format(", ".join(class_objects)))
-                    return
-                else:
-                    print("** class doesn't exist **")
-                    return
-        except IndexError:
-            print("*** Unknown syntax: {} ***".format(line))
+        supported = {
+            "all": self.do_all,
+            "count": lambda class_name: print(self.helper_get_all(class_name, get_count=True))
+        }
+        command = re.match(r"^(\w+)\.(\w+)\(\)$", line)
+        if not command:
+            print("*** Unknown syntax: ", line)
             return
-
-    def do_exeAll(self, arg):
-        self.do_all(arg)
-
+        class_name, command = command.groups()
+        if command in supported.keys():
+            supported[command](class_name)
 
 
 if __name__ == "__main__":
