@@ -191,10 +191,10 @@ class HBNBCommand(cmd.Cmd):
         """
         simple_commands = {
             "all": self.do_all,
-            "count": lambda class_name: print(self.helper_get_all(class_name, get_count=True))
+            "count": lambda one: print(self.helper_get_all(one, get_count=True))
         }
         hard_commands = {
-            "show": lambda class_name, ID: print(self.helper_get_object(class_name, ID))
+            "show": lambda one, two: self.do_show(f"{one} {two}")
         }
         command = re.match(r"^(\w+)\.(\w+)\((.*)\)$", line)
         if not command:
