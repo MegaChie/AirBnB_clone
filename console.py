@@ -71,7 +71,7 @@ class HBNBCommand(cmd.Cmd):
 
         if get_count:
             return len(objects_list)
-        
+
         return objects_list
 
 
@@ -189,17 +189,25 @@ class HBNBCommand(cmd.Cmd):
         """
         Handles advanced commands like <ClassName>.<command>()
         """
-        supported = {
+        simple_commands = {
             "all": self.do_all,
             "count": lambda class_name: print(self.helper_get_all(class_name, get_count=True))
         }
-        command = re.match(r"^(\w+)\.(\w+)\(\)$", line)
+        hard_commands = {
+            "show": lambda class_name, ID: print(self.helper_get_object(class_name, ID))
+        }
+        command = re.match(r"^(\w+)\.(\w+)\((.*)\)$", line)
         if not command:
-            print("*** Unknown syntax: ", line)
+            print("*** Unknown syntax:", line)
             return
-        class_name, command = command.groups()
-        if command in supported.keys():
-            supported[command](class_name)
+
+        class_name, command, ID = command.groups()
+        if command in simple_commands.keys():
+            simple_commands[command](class_name)
+            return
+        
+        if command in hard_commands.keys():
+            hard_commands[command](class_name, ID)
 
 
 if __name__ == "__main__":
