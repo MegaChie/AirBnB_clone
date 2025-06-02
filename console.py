@@ -196,7 +196,8 @@ class HBNBCommand(cmd.Cmd):
         }
         hard_commands = {
             "show": self.do_show,
-            "destroy": self.do_destroy
+            "destroy": self.do_destroy,
+            "update": self.do_update
         }
         command = re.match(r"^(\w+)\.(\w+)\((.*)\)$", line)
         if not command:
@@ -209,7 +210,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         if command in hard_commands.keys():
-            ID = intel.replace("\"", "").replace(",", "")
+            intel = intel.replace("\"", "").replace(",", "")
             hard_commands[command](f"{class_name} {intel}")
             return
 
