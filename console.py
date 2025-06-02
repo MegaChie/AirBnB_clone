@@ -191,24 +191,26 @@ class HBNBCommand(cmd.Cmd):
         """
         simple_commands = {
             "all": self.do_all,
-            "count": lambda one: print(self.helper_get_all(one, get_count=True))
+            "count": lambda one: print(self.helper_get_all(one,
+                                                           get_count=True))
         }
         hard_commands = {
-            "show": lambda one, two: self.do_show(f"{one} {two}")
+            "show": self.do_show,
+            "destroy": self.do_destroy
         }
         command = re.match(r"^(\w+)\.(\w+)\((.*)\)$", line)
         if not command:
             print("*** Unknown syntax:", line)
             return
 
-        class_name, command, ID = command.groups()
+        class_name, command, intel = command.groups()
         if command in simple_commands.keys():
             simple_commands[command](class_name)
             return
-        
+
         if command in hard_commands.keys():
-            ID = ID.replace("\"", "")
-            hard_commands[command](class_name, ID)
+            ID = intel.replace("\"", "").replace(",", "")
+            hard_commands[command](f"{class_name} {intel}")
             return
 
 
