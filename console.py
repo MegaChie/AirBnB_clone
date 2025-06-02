@@ -207,7 +207,9 @@ class HBNBCommand(cmd.Cmd):
             return
         
         if command in hard_commands.keys():
+            ID = ID.replace("\"", "")
             hard_commands[command](class_name, ID)
+            return
 
 
 if __name__ == "__main__":
